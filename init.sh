@@ -85,7 +85,7 @@ fn main() {
 
     // let n: usize = lines.next().unwrap().parse().unwrap();
     
-    let mut output = String::from("hello_world_!");
+    let output = String::from("hello_world_!");
     write!(stdout, "{}", output).unwrap();
 }
 EOF
@@ -96,4 +96,3 @@ fi
 
 echo "문제 생성 완료: src/bin/${file_name}.rs"
 echo "실행 방법: cargo run --bin ${file_name}"
-
