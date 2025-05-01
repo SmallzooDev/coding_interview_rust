@@ -74,17 +74,14 @@ elif [[ $url == *"acmicpc.net"* ]]; then
 use std::io::{self, Read, Write};
 
 fn main() {
-    let stdin = io::stdin();
-    let stdout = io::stdout();
-    let mut stdin = stdin.lock();
-    let mut stdout = stdout.lock();
-
+    let mut stdin = io::stdin().lock();
+    let mut stdout = io::stdout().lock();
     let mut input = String::new();
     stdin.read_to_string(&mut input).unwrap();
     let mut lines = input.lines();
 
     // let n: usize = lines.next().unwrap().parse().unwrap();
-    
+
     let output = String::from("hello_world_!");
     write!(stdout, "{}", output).unwrap();
 }
