@@ -20,8 +20,6 @@ fn main() {
     let mut dp_inc = vec![1; n];
     let mut dp_dec = vec![1; n];
 
-    dp_inc[0] = 1;
-
     for i in 0..n {
         for j in 0..i {
             if inputs[i] > inputs[j] {
