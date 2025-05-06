@@ -1,9 +1,7 @@
 // Baekjoon - 1987
 // https://www.acmicpc.net/problem/1987
 
-use std::{
-    io::{self, Read, Write},
-};
+use std::io::{self, Read, Write};
 const DY: [i32; 4] = [-1, 0, 1, 0];
 const DX: [i32; 4] = [0, 1, 0, -1];
 
