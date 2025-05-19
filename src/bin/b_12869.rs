@@ -1,6 +1,7 @@
 // Baekjoon - 12869
 // https://www.acmicpc.net/problem/12869
 
+use std::cmp::max;
 use std::collections::VecDeque;
 use std::io::{self, Read, Write};
 
@@ -44,9 +45,9 @@ fn main() {
         }
 
         for dmg in &damage {
-            let new_h1 = std::cmp::max(0, h1 - dmg[0]);
-            let new_h2 = std::cmp::max(0, h2 - dmg[1]);
-            let new_h3 = std::cmp::max(0, h3 - dmg[2]);
+            let new_h1 = max(0, h1 - dmg[0]);
+            let new_h2 = max(0, h2 - dmg[1]);
+            let new_h3 = max(0, h3 - dmg[2]);
 
             if visited[new_h1 as usize][new_h2 as usize][new_h3 as usize] != -1 {
                 continue;
