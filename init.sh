@@ -75,7 +75,8 @@ elif [[ $url == *"acmicpc.net"* ]]; then
 #[allow(unused_must_use, unused_doc_comments)]
 fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
     // let n: usize = io.get(0usize)?;
-    // let arr = io.get(vec![0i64; n])?;
+    // let s: String = io.get(String::new())?;
+    // let line: String = io.get_line()?;
     
     // 여기에 문제 풀이 코드 작성
     
@@ -83,7 +84,7 @@ fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
     None
 }
 
-/// IO template - from bubbler
+/// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
 mod io {
     pub(crate) use std::io::{Write, stdin, stdout, BufWriter, BufRead};
@@ -100,6 +101,9 @@ mod io {
         }
         pub(crate) fn get<T: Fill>(&mut self, exemplar: T) -> Option<T> {
             self.ii.get(exemplar)
+        }
+        pub(crate) fn get_line(&mut self) -> Option<String> {
+            self.ii.get_line()
         }
         pub(crate) fn put<T: Print>(&mut self, t: T) -> &mut Self {
             t.print(&mut self.oo);
@@ -147,6 +151,10 @@ mod io {
             exemplar.fill_from_input(self)?;
             Some(exemplar)
         }
+        pub(crate) fn get_line(&mut self) -> Option<String> {
+            self.next_line()?;
+            Some(self.line.trim_end().to_string())
+        }
     }
     pub(crate) trait Fill {
         fn fill_from_input<R: BufRead>(&mut self, i: &mut I<R>) -> Option<()>;
@@ -164,6 +172,19 @@ mod io {
         };
     }
     fill_num!(usize, i64, f64);
+    impl Fill for String {
+        fn fill_from_input<R: BufRead>(&mut self, i: &mut I<R>) -> Option<()> {
+            i.rem = i.rem.trim_start_matches(ws);
+            while i.rem.is_empty() {
+                i.next_line()?;
+                i.rem = i.rem.trim_start_matches(ws);
+            }
+            let tok = i.rem.split(ws).next().unwrap();
+            i.rem = &i.rem[tok.len()..];
+            *self = tok.to_string();
+            Some(())
+        }
+    }
     impl<T: Fill> Fill for Vec<T> {
         fn fill_from_input<R: BufRead>(&mut self, i: &mut I<R>) -> Option<()> {
             for ii in self.iter_mut() {
