@@ -1,92 +1,46 @@
-#!/bin/bash
-
-url=$1
-
-if [ -z "$url" ]; then
-  echo "사용법: ./init.sh <문제_URL>"
-  exit 1
-fi
-
-# 문자열을 snake_case로 변환하고 패키지 이름으로 적합하게 만드는 함수
-to_snake_case() {
-  # 숫자로 시작하는 경우 'p' 접두사 추가
-  local input=$1
-  if [[ $input =~ ^[0-9] ]]; then
-    input="p$input"
-  fi
-
-  # 특수문자를 제거하고 snake_case로 변환
-  echo "$input" | sed 's/[^a-zA-Z0-9-]//g' |
-    sed 's/[A-Z]/\L&/g' |
-    sed 's/-/_/g'
-}
-
-# URL에서 사이트 타입 확인
-if [[ $url == *"leetcode.com"* ]]; then
-  # URL에서 problems/ 이후의 문제 이름만 추출
-  raw_name=$(echo $url | sed -E 's/.*problems\/([^/?]+).*/\1/')
-  problem_name=$(to_snake_case "$raw_name")
-
-  # 기본 디렉토리 경로
-  file_name="l_${problem_name}"
-
-  # 디렉토리 생성
-  mkdir -p "src/bin"
-
-  # Rust 실행 파일 생성
-  cat >"src/bin/${file_name}.rs" <<EOF
-// LeetCode - ${raw_name}
-// ${url}
-
-fn main() {
-    println!("문제: ${raw_name}");
-    
-    // 여기에 코드 작성
-    let solution = Solution::new();
-    
-    println!("완료!");
-}
-
-struct Solution;
-
-impl Solution {
-    fn new() -> Self {
-        Solution
-    }
-    
-    // 문제 풀이 메서드 추가
-}
-EOF
-elif [[ $url == *"acmicpc.net"* ]]; then
-  raw_name=$(echo $url | sed -E 's/.*\/problem\/([0-9]+).*/\1/')
-
-  # 기본 디렉토리 경로
-  file_name="b_${raw_name}"
-
-  # 디렉토리 생성
-  mkdir -p "src/bin"
-
-  # Rust 실행 파일 생성 (백준용 템플릿)
-  cat >"src/bin/${file_name}.rs" <<EOF
-// Baekjoon - ${raw_name}
-// ${url}
+// Baekjoon - 2309
+// https://www.acmicpc.net/problem/2309
 
 #[allow(clippy::all)]
 #[allow(unused_must_use, unused_doc_comments)]
 fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
-    // let n: usize = io.get(0usize)?;
-    // let arr = io.get(vec![0i64; n])?;
-    
-    // 여기에 문제 풀이 코드 작성
-    
-    // io.put("결과").nl();
+    let mut dwarfs = vec![];
+    let mut total_sum = 0;
+
+    for _ in 0..9 {
+        let height = io.get(0usize)?;
+        total_sum += height;
+        dwarfs.push(height);
+    }
+
+    let excess = total_sum - 100;
+    let mut found = false;
+
+    'outer: for i in 0..9 {
+        for j in i + 1..9 {
+            if dwarfs[i] + dwarfs[j] == excess {
+                dwarfs.remove(j);
+                dwarfs.remove(i);
+                found = true;
+                break 'outer;
+            }
+        }
+    }
+
+    if found {
+        dwarfs.sort();
+        for height in dwarfs {
+            io.put(height).nl();
+        }
+    }
+
     None
 }
 
 /// IO template - from bubbler
 // boj - https://www.acmicpc.net/user/bubbler
 mod io {
-    pub(crate) use std::io::{Write, stdin, stdout, BufWriter, BufRead};
+    pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {
         ii: I<R>,
         oo: BufWriter<W>,
@@ -113,8 +67,8 @@ mod io {
         fn print<W: Write>(&self, w: &mut W);
     }
     macro_rules! print_disp {
-        (\$(\$t:ty),+) => {
-            \$(impl Print for \$t { fn print < W : Write > (& self, w : & mut W) {
+        ($($t:ty),+) => {
+            $(impl Print for $t { fn print < W : Write > (& self, w : & mut W) {
             write!(w, "{}", self) .unwrap(); } })+
         };
     }
@@ -155,8 +109,8 @@ mod io {
         c <= ' '
     }
     macro_rules! fill_num {
-        (\$(\$t:ty),+) => {
-            \$(impl Fill for \$t { fn fill_from_input < R : BufRead > (& mut self, i : &
+        ($($t:ty),+) => {
+            $(impl Fill for $t { fn fill_from_input < R : BufRead > (& mut self, i : &
             mut I < R >) -> Option < () > { i.rem = i.rem.trim_start_matches(ws); while i
             .rem.is_empty() { i.next_line() ?; i.rem = i.rem.trim_start_matches(ws); }
             let tok = i.rem.split(ws).next().unwrap(); i.rem = & i.rem[tok.len()..]; *
@@ -188,11 +142,3 @@ pub fn main() {
     let mut io = IO::new(stdin, stdout);
     solve(&mut io);
 }
-EOF
-else
-  echo "지원하지 않는 사이트입니다. (지원: leetcode, acmicpc.net)"
-  exit 1
-fi
-
-echo "문제 생성 완료: src/bin/${file_name}.rs"
-echo "실행 방법: cargo run --bin ${file_name}"
