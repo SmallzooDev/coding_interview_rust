@@ -77,6 +77,7 @@ fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
     // let n: usize = io.get(0usize)?;
     // let s: String = io.get(String::new())?;
     // let line: String = io.get_line()?;
+    // let grid = io.get(vec![B; r])?;  // 바이트 배열로 격자 읽기
     
     // 여기에 문제 풀이 코드 작성
     
@@ -185,6 +186,20 @@ mod io {
             Some(())
         }
     }
+    impl Fill for Vec<u8> {
+        fn fill_from_input<R: BufRead>(&mut self, i: &mut I<R>) -> Option<()> {
+            i.rem = i.rem.trim_start_matches(ws);
+            while i.rem.is_empty() {
+                i.next_line()?;
+                i.rem = i.rem.trim_start_matches(ws);
+            }
+            let tok = i.rem.split(ws).next().unwrap();
+            i.rem = &i.rem[tok.len()..];
+            self.extend_from_slice(tok.as_bytes());
+            Some(())
+        }
+    }
+    pub(crate) const B: Vec<u8> = Vec::new();
     impl<T: Fill> Fill for Vec<T> {
         fn fill_from_input<R: BufRead>(&mut self, i: &mut I<R>) -> Option<()> {
             for ii in self.iter_mut() {
