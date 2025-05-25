@@ -4,21 +4,55 @@
 #[allow(clippy::all)]
 #[allow(unused_must_use, unused_doc_comments)]
 fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
-    // let n: usize = io.get(0usize)?;
-    // let s: String = io.get(String::new())?;
-    // let line: String = io.get_line()?;
-    // let grid = io.get(vec![B; r])?;  // 바이트 배열로 격자 읽기
-    
-    // 여기에 문제 풀이 코드 작성
-    
-    // io.put("결과").nl();
+    let [t, w] = io.get([0usize; 2])?;
+    let mut falls = vec![0; t];
+    for i in 0..t {
+        let tmp = io.get(0usize)?;
+        falls[i] = tmp;
+    }
+
+    let mut dp = vec![vec![vec![-1i32; 2]; w + 1]; t + 1];
+
+    dp[0][0][0] = 0;
+
+    for time in 0..t {
+        for moves in 0..=w {
+            for pos in 0..2 {
+                if dp[time][moves][pos] == -1 {
+                    continue;
+                }
+
+                let fall_tree = falls[time] - 1;
+
+                let caught = if pos == fall_tree { 1 } else { 0 };
+                dp[time + 1][moves][pos] = dp[time + 1][moves][pos].max(dp[time][moves][pos] + caught);
+
+                if moves < w {
+                    let next_pos = 1 - pos;
+                    let caught = if next_pos == fall_tree { 1 } else { 0 };
+                    dp[time + 1][moves + 1][next_pos] = dp[time + 1][moves + 1][next_pos].max(dp[time][moves][pos] + caught);
+                }
+            }
+        }
+    }
+
+    let mut result = 0;
+    for moves in 0..=w {
+        for pos in 0..2 {
+            if dp[t][moves][pos] != -1 {
+                result = result.max(dp[t][moves][pos]);
+            }
+        }
+    }
+
+    io.put(result as i64).nl();
     None
 }
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
 mod io {
-    pub(crate) use std::io::{Write, stdin, stdout, BufWriter, BufRead};
+    pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {
         ii: I<R>,
         oo: BufWriter<W>,
