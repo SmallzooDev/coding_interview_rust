@@ -4,21 +4,25 @@
 #[allow(clippy::all)]
 #[allow(unused_must_use, unused_doc_comments)]
 fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
-    // let n: usize = io.get(0usize)?;
-    // let s: String = io.get(String::new())?;
-    // let line: String = io.get_line()?;
-    // let grid = io.get(vec![B; r])?;  // 바이트 배열로 격자 읽기
-    
-    // 여기에 문제 풀이 코드 작성
-    
-    // io.put("결과").nl();
+    let n: usize = io.get(0usize)?;
+
+    let mut curr: f64 = io.get(0.0f64)?;
+    let mut curr_max = curr;
+
+    for _ in 1..n {
+        let num: f64 = io.get(0.0f64)?;
+        curr = (curr * num).max(num);
+        curr_max = curr_max.max(curr);
+    }
+
+    io.put(format!("{:.3}", curr_max)).nl();
     None
 }
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
 mod io {
-    pub(crate) use std::io::{Write, stdin, stdout, BufWriter, BufRead};
+    pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {
         ii: I<R>,
         oo: BufWriter<W>,
@@ -53,7 +57,7 @@ mod io {
             write!(w, "{}", self) .unwrap(); } })+
         };
     }
-    print_disp!(usize, i64, String, & str, char);
+    print_disp!(usize, i64, String, &str, char);
     pub(crate) struct I<R: BufRead> {
         r: R,
         line: String,
@@ -69,13 +73,9 @@ mod io {
         }
         pub(crate) fn next_line(&mut self) -> Option<()> {
             self.line.clear();
-            (self.r.read_line(&mut self.line).unwrap() > 0)
-                .then(|| {
-                    self
-                        .rem = unsafe {
-                        (&self.line[..] as *const str).as_ref().unwrap()
-                    };
-                })
+            (self.r.read_line(&mut self.line).unwrap() > 0).then(|| {
+                self.rem = unsafe { (&self.line[..] as *const str).as_ref().unwrap() };
+            })
         }
         pub(crate) fn get<T: Fill>(&mut self, exemplar: T) -> Option<T> {
             let mut exemplar = exemplar;
@@ -147,6 +147,7 @@ mod io {
         }
     }
 }
+
 use io::*;
 pub fn main() {
     let stdin = stdin().lock();
