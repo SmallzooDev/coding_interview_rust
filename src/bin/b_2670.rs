@@ -1,38 +1,24 @@
-// Baekjoon - 1159
-// https://www.acmicpc.net/problem/1159
+// Baekjoon - 2670
+// https://www.acmicpc.net/problem/2670
 
 #[allow(clippy::all)]
 #[allow(unused_must_use, unused_doc_comments)]
 fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
-    let n: usize = io.get(0usize)?;
-    let mut name_map: HashMap<char, usize> = HashMap::new();
-    for _i in 0..n {
-        let c: char = io.get_line()?.chars().next()?;
-        *name_map.entry(c).or_insert(0) += 1;
-    }
-
-    // 값이 5 이상인 키들을 수집하고 정렬
-    let mut result: Vec<char> = name_map
-        .iter()
-        .filter(|(_, &count)| count >= 5)
-        .map(|(&ch, _)| ch)
-        .collect();
-
-    if result.is_empty() {
-        io.put("PREDAJA").nl();
-    } else {
-        result.sort();  // 사전순 정렬
-        let result_string: String = result.into_iter().collect();
-        io.put(result_string).nl();
-    }
-
+    // let n: usize = io.get(0usize)?;
+    // let s: String = io.get(String::new())?;
+    // let line: String = io.get_line()?;
+    // let grid = io.get(vec![B; r])?;  // 바이트 배열로 격자 읽기
+    
+    // 여기에 문제 풀이 코드 작성
+    
+    // io.put("결과").nl();
     None
 }
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
 mod io {
-    pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
+    pub(crate) use std::io::{Write, stdin, stdout, BufWriter, BufRead};
     pub(crate) struct IO<R: BufRead, W: Write> {
         ii: I<R>,
         oo: BufWriter<W>,
@@ -130,6 +116,20 @@ mod io {
             Some(())
         }
     }
+    impl Fill for Vec<u8> {
+        fn fill_from_input<R: BufRead>(&mut self, i: &mut I<R>) -> Option<()> {
+            i.rem = i.rem.trim_start_matches(ws);
+            while i.rem.is_empty() {
+                i.next_line()?;
+                i.rem = i.rem.trim_start_matches(ws);
+            }
+            let tok = i.rem.split(ws).next().unwrap();
+            i.rem = &i.rem[tok.len()..];
+            self.extend_from_slice(tok.as_bytes());
+            Some(())
+        }
+    }
+    pub(crate) const B: Vec<u8> = Vec::new();
     impl<T: Fill> Fill for Vec<T> {
         fn fill_from_input<R: BufRead>(&mut self, i: &mut I<R>) -> Option<()> {
             for ii in self.iter_mut() {
@@ -147,11 +147,7 @@ mod io {
         }
     }
 }
-
 use io::*;
-use std::collections::HashMap;
-use std::fmt::Pointer;
-
 pub fn main() {
     let stdin = stdin().lock();
     let stdout = stdout().lock();
