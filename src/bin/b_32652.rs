@@ -29,9 +29,6 @@ mod io {
         pub(crate) fn get<T: Fill>(&mut self, exemplar: T) -> Option<T> {
             self.ii.get(exemplar)
         }
-        pub(crate) fn get_line(&mut self) -> Option<String> {
-            self.ii.get_line()
-        }
         pub(crate) fn put<T: Print>(&mut self, t: T) -> &mut Self {
             t.print(&mut self.oo);
             self
@@ -77,10 +74,6 @@ mod io {
             let mut exemplar = exemplar;
             exemplar.fill_from_input(self)?;
             Some(exemplar)
-        }
-        pub(crate) fn get_line(&mut self) -> Option<String> {
-            self.next_line()?;
-            Some(self.line.trim_end().to_string())
         }
     }
     pub(crate) trait Fill {
