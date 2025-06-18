@@ -87,6 +87,7 @@ fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{Write, stdin, stdout, BufWriter, BufRead};
     pub(crate) struct IO<R: BufRead, W: Write> {

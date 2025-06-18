@@ -2,7 +2,7 @@
 // https://www.acmicpc.net/problem/1012
 
 #[allow(clippy::all)]
-#[allow(unused_must_use, unused_doc_comments)]
+#[allow(unused_must_use, unused_doc_comments, dead_code)]
 fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
     let cases: usize = io.get(0usize)?;
     for _ in 0..cases {
@@ -32,7 +32,14 @@ fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
     None
 }
 
-fn dfs(grid: &[Vec<usize>], visited: &mut [Vec<bool>], y: usize, x: usize, max_y: usize, max_x: usize) {
+fn dfs(
+    grid: &[Vec<usize>],
+    visited: &mut [Vec<bool>],
+    y: usize,
+    x: usize,
+    max_y: usize,
+    max_x: usize,
+) {
     if visited[y][x] || grid[y][x] == 0 {
         return;
     }
@@ -55,6 +62,7 @@ fn dfs(grid: &[Vec<usize>], visited: &mut [Vec<bool>], y: usize, x: usize, max_y
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {
