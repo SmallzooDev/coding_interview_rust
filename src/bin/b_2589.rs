@@ -79,6 +79,7 @@ fn get_max_distance(grid: &[Vec<char>], start_y: usize, start_x: usize, max_y: u
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {

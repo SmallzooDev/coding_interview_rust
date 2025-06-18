@@ -53,6 +53,7 @@ fn bfs(grid: &[Vec<usize>], y: usize, x: usize) -> usize {
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {

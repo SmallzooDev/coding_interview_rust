@@ -123,6 +123,7 @@ fn process_fire(grid: &[Vec<char>], n: usize, m: usize) -> Vec<Vec<i32>> {
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {

@@ -49,6 +49,7 @@ fn is_same_color(grid: &Vec<Vec<usize>>, x: usize, y: usize, size: usize) -> boo
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {

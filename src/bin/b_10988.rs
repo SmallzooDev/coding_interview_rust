@@ -9,7 +9,7 @@ fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
     let mut right = line.len() - 1;
     let mut output: usize = 1;
 
-    while (left < right) {
+    while left < right {
         if line[left] != line[right] {
             output = 0;
             break;
@@ -24,6 +24,7 @@ fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {
@@ -60,7 +61,7 @@ mod io {
             write!(w, "{}", self) .unwrap(); } })+
         };
     }
-    print_disp!(usize, i64, String, & str, char);
+    print_disp!(usize, i64, String, &str, char);
     pub(crate) struct I<R: BufRead> {
         r: R,
         line: String,
@@ -76,13 +77,9 @@ mod io {
         }
         pub(crate) fn next_line(&mut self) -> Option<()> {
             self.line.clear();
-            (self.r.read_line(&mut self.line).unwrap() > 0)
-                .then(|| {
-                    self
-                        .rem = unsafe {
-                        (&self.line[..] as *const str).as_ref().unwrap()
-                    };
-                })
+            (self.r.read_line(&mut self.line).unwrap() > 0).then(|| {
+                self.rem = unsafe { (&self.line[..] as *const str).as_ref().unwrap() };
+            })
         }
         pub(crate) fn get<T: Fill>(&mut self, exemplar: T) -> Option<T> {
             let mut exemplar = exemplar;

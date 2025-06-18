@@ -81,6 +81,7 @@ fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
 }
 
 /// IO template
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {

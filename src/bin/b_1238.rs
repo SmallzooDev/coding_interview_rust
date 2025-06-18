@@ -57,6 +57,7 @@ fn dijk(graph: &[Vec<(usize, i64)>], start: usize, n: usize) -> Vec<i64> {
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {

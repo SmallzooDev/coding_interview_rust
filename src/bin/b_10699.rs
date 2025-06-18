@@ -23,7 +23,20 @@ fn solve<R: BufRead, W: Write>(io: &mut IO<R, W>) -> Option<()> {
         year += 1;
     }
 
-    let days_in_month = [31, if is_leap_year(year) { 29 } else { 28 }, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    let days_in_month = [
+        31,
+        if is_leap_year(year) { 29 } else { 28 },
+        31,
+        30,
+        31,
+        30,
+        31,
+        31,
+        30,
+        31,
+        30,
+        31,
+    ];
     let mut month = 1;
 
     for &days_in_this_month in &days_in_month {
@@ -46,6 +59,7 @@ fn is_leap_year(year: u64) -> bool {
 
 /// IO template - from bubbler (modified)
 // boj - https://www.acmicpc.net/user/bubbler
+#[allow(dead_code)]
 mod io {
     pub(crate) use std::io::{stdin, stdout, BufRead, BufWriter, Write};
     pub(crate) struct IO<R: BufRead, W: Write> {
@@ -82,7 +96,7 @@ mod io {
             write!(w, "{}", self) .unwrap(); } })+
         };
     }
-    print_disp!(usize, i64, String, & str, char);
+    print_disp!(usize, i64, String, &str, char);
     pub(crate) struct I<R: BufRead> {
         r: R,
         line: String,
@@ -98,13 +112,9 @@ mod io {
         }
         pub(crate) fn next_line(&mut self) -> Option<()> {
             self.line.clear();
-            (self.r.read_line(&mut self.line).unwrap() > 0)
-                .then(|| {
-                    self
-                        .rem = unsafe {
-                        (&self.line[..] as *const str).as_ref().unwrap()
-                    };
-                })
+            (self.r.read_line(&mut self.line).unwrap() > 0).then(|| {
+                self.rem = unsafe { (&self.line[..] as *const str).as_ref().unwrap() };
+            })
         }
         pub(crate) fn get<T: Fill>(&mut self, exemplar: T) -> Option<T> {
             let mut exemplar = exemplar;
